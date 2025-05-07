@@ -2,6 +2,8 @@
 Ideally in a larger project it would be separated into multiple projects. Logic would also go into
 services layer/project.
 
+Basic indexing in AppDbContext.cs. I used EF Core as ORM.
+
 This is a basic example of POST object for the /api/expenses endpoint.
 We pass UserId as for the purpose of this exercise I didn't add auth (not enough time).
 In the ideal world we would have a JWT token and we would pass the userId from the token.
