@@ -1,5 +1,8 @@
 ﻿using DistriBindApi.Data;
+using DistriBindApi.Enums;
+using DistriBindApi.Interfaces;
 using DistriBindApi.Models;
+using DistriBindApi.Strategies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +13,12 @@ namespace DistriBindApi.Controllers;
 public class ExpensesController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IEnumerable<IExpenseCategorizationStrategy> _strategies;
 
-    public ExpensesController(AppDbContext context)
+    public ExpensesController(AppDbContext context, IEnumerable<IExpenseCategorizationStrategy> strategies)
     {
         _context = context;
+        _strategies = strategies;
     }
 
     // GET: api/expenses
@@ -41,6 +46,17 @@ public class ExpensesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Expense>> CreateExpense(Expense expense)
     {
+        
+        foreach (var strategy in _strategies)
+        {
+            var category = strategy.Categorize(expense);
+            if (category != Category.Uncategorized)
+            {
+                expense.Category = category;
+                break;
+            }
+        }
+        
         _context.Expenses.Add(expense);
         await _context.SaveChangesAsync();
 

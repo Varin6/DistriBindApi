@@ -28,12 +28,12 @@ public abstract class Entity : IEntity
         public abstract int Id { get; set; }
 
         
-        /// <summary>
-        /// Concurrency Stamp.
-        /// </summary>
-        [Timestamp]
-        [JsonIgnore]
-        public byte[] ConcurrencyStamp { get; set; }
+        // /// <summary>
+        // /// Concurrency Stamp.
+        // /// </summary>
+        // [Timestamp]
+        // [JsonIgnore]
+        // public byte[] ConcurrencyStamp { get; set; }
 
         /// <summary>
         /// Created By Id.
@@ -124,22 +124,22 @@ public abstract class Entity : IEntity
             this.DeletedOn = DateTime.UtcNow;
         }
 
-        /// <summary>
-        /// ConcurrencyIsValid.
-        /// </summary>
-        /// <param name="concurrencyStamp">concurrencyStamp.</param>
-        /// <returns>bool.</returns>
-        public bool ConcurrencyIsValid(byte[] concurrencyStamp)
-        {
-            bool isValid = true;
-
-            if (concurrencyStamp != null && concurrencyStamp.Length > 0)
-            {
-                isValid = ConcurrencyStamp.SequenceEqual(concurrencyStamp);
-            }
-
-            return isValid;
-        }
+        // /// <summary>
+        // /// ConcurrencyIsValid.
+        // /// </summary>
+        // /// <param name="concurrencyStamp">concurrencyStamp.</param>
+        // /// <returns>bool.</returns>
+        // public bool ConcurrencyIsValid(byte[] concurrencyStamp)
+        // {
+        //     bool isValid = true;
+        //
+        //     if (concurrencyStamp != null && concurrencyStamp.Length > 0)
+        //     {
+        //         isValid = ConcurrencyStamp.SequenceEqual(concurrencyStamp);
+        //     }
+        //
+        //     return isValid;
+        // }
         
 
         #endregion
