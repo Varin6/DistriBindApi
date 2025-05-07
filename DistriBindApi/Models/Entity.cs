@@ -124,22 +124,7 @@ public abstract class Entity : IEntity
             this.DeletedOn = DateTime.UtcNow;
         }
 
-        // /// <summary>
-        // /// ConcurrencyIsValid.
-        // /// </summary>
-        // /// <param name="concurrencyStamp">concurrencyStamp.</param>
-        // /// <returns>bool.</returns>
-        // public bool ConcurrencyIsValid(byte[] concurrencyStamp)
-        // {
-        //     bool isValid = true;
-        //
-        //     if (concurrencyStamp != null && concurrencyStamp.Length > 0)
-        //     {
-        //         isValid = ConcurrencyStamp.SequenceEqual(concurrencyStamp);
-        //     }
-        //
-        //     return isValid;
-        // }
+        
         
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿using DistriBindApi.Data;
+using DistriBindApi.DTOs;
 using DistriBindApi.Enums;
 using DistriBindApi.Interfaces;
 using DistriBindApi.Models;
@@ -25,14 +26,14 @@ public class ExpensesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
     {
-        return await _context.Expenses.Include(e => e.Category).ToListAsync();
+        return await _context.Expenses.ToListAsync();
     }
 
     // GET: api/expenses/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Expense>> GetExpense(int id)
     {
-        var expense = await _context.Expenses.Include(e => e.Category).FirstOrDefaultAsync(e => e.Id == id);
+        var expense = await _context.Expenses.FirstOrDefaultAsync(e => e.Id == id);
 
         if (expense == null)
         {
@@ -105,4 +106,26 @@ public class ExpensesController : ControllerBase
 
         return NoContent();
     }
+    
+    
+    [HttpGet("monthly-expenses/{userId}")]
+    public async Task<ActionResult<IEnumerable<MonthlyExpenseDto>>> GetMonthlyExpenses(int userId)
+    {
+        var result = await _context.Expenses
+            .Where(e => e.UserId == userId)
+            .GroupBy(e => new { e.CreatedOn.Year, e.CreatedOn.Month })
+            .Select(g => new MonthlyExpenseDto
+            {
+                Year = g.Key.Year,
+                Month = g.Key.Month,
+                TotalExpense = g.Sum(e => e.Amount)
+            })
+            .OrderBy(e => e.Year)
+            .ThenBy(e => e.Month)
+            .ToListAsync();
+
+        return Ok(result);
+    }
+    
+    
 }
